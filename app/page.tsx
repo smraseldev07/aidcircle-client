@@ -7,11 +7,11 @@ import { WhyOrganize } from "@/components/why-organize";
 export default function Home() {
   return (
     <div className="flex min-h-screen flex-col bg-white">
-      <Navbar />
+     
       <Banner />
       <WhyOrganize />
       <Subscribe />
-      <Footer />
+     
     </div>
   );
 }
