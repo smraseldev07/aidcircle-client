@@ -2,8 +2,8 @@
 
 import React from "react";
 import Link from "next/link";
-import { Navbar } from "@/components/navbar";
-import { EVENT_TYPES, addEvent, todayISO, type EventRecord } from "@/lib/events";
+
+import { EVENT_TYPES, addEvent, getEvents, todayISO, type EventRecord } from "@/lib/events";
 
 // The empty form; email is filled in and kept between submissions.
 const emptyForm = {
@@ -24,6 +24,8 @@ const labelClass = "text-sm font-medium text-[#20293d]";
 export default function CreateEventPage() {
   const [form, setForm] = React.useState(emptyForm);
   const [dateError, setDateError] = React.useState("");
+  const [submitError, setSubmitError] = React.useState("");
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [created, setCreated] = React.useState<EventRecord | null>(null);
 
   // One handler for every input/select; works because each field's
@@ -36,7 +38,7 @@ export default function CreateEventPage() {
     setForm({ ...form, [event.target.name]: event.target.value });
   }
 
-  function handleDateChange(event: React.ChangeEvent<HTMLInputElement>) {
+ function handleDateChange(event: React.ChangeEvent<HTMLInputElement>) {
     const value = event.target.value;
     setForm({ ...form, date: value });
     // The special rule: the event date may not be in the past.
@@ -47,23 +49,50 @@ export default function CreateEventPage() {
     }
   }
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  // Send the created event to the backend, then keep it locally too.
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    // See the raw form data the user submitted.
+    console.log("Submitted data:", form);
+
     if (form.date < todayISO()) {
       setDateError("Past dates are not allowed — pick today or a future date.");
       return;
     }
 
-    const record = addEvent({
+    // Kept with the event so we can validate who created it.
+    const eventData = {
       title: form.title.trim(),
       description: form.description.trim(),
       type: form.type,
       thumbnailUrl: form.thumbnailUrl.trim(),
       location: form.location.trim(),
       date: form.date,
-      // Kept with the event so we can validate who created it.
       creatorEmail: form.email.trim(),
-    });
+    };
+
+    // POST the event data to the backend.
+  
+     
+      const response = await fetch("http://localhost:8000/create-event", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(eventData),
+      });
+
+      const data = await response.json()
+      console.log( data);
+      
+
+    
+
+    // The backend accepted it, so save it locally and show the success view.
+    const record = addEvent(eventData);
+
+    // See what was submitted (includes the generated id/createdAt).
+    console.log("Event submitted:", record);
+    console.log("All events:", getEvents());
 
     setCreated(record);
     setForm({ ...emptyForm, email: form.email }); // keep the email filled in
@@ -71,7 +100,7 @@ export default function CreateEventPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <Navbar />
+  
 
       <main className="px-10 py-12">
         <div className="mx-auto w-full max-w-xl rounded-2xl bg-[#ddebe1] px-8 py-10">
@@ -231,11 +260,18 @@ export default function CreateEventPage() {
                 </p>
               </div>
 
+              {submitError ? (
+                <p role="alert" className="text-xs text-red-600">
+                  {submitError}
+                </p>
+              ) : null}
+
               <button
                 type="submit"
-                className="mt-2 h-10 rounded-lg bg-[#146240] text-sm font-semibold text-white transition-colors hover:bg-[#0e4d32]"
+                disabled={isSubmitting}
+                className="mt-2 h-10 rounded-lg bg-[#146240] text-sm font-semibold text-white transition-colors hover:bg-[#0e4d32] disabled:opacity-50"
               >
-                Create event
+                {isSubmitting ? "Creating event…" : "Create event"}
               </button>
             </form>
           )}
