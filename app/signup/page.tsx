@@ -2,7 +2,6 @@
 
 import React from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import {
   Heart,
   User,
@@ -33,7 +32,6 @@ const emptyForm = {
 const MIN_PASSWORD_LENGTH = 8;
 
 export default function SignupPage() {
-  const router = useRouter();
   const [form, setForm] = React.useState(emptyForm);
   const [showPassword, setShowPassword] = React.useState(false);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -44,6 +42,7 @@ export default function SignupPage() {
     event: React.ChangeEvent<HTMLInputElement>
   ) {
     setForm({ ...form, [event.target.name]: event.target.value });
+    console.log("Form updated:", { ...form, [event.target.name]: event.target.value });
   }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -81,6 +80,9 @@ export default function SignupPage() {
     }
 
     setCreated(true);
+
+   
+    
   }
 
   return (
@@ -99,10 +101,10 @@ export default function SignupPage() {
             </p>
             <button
               type="button"
-              onClick={() => router.push("/events")}
+              onClick={() => setCreated(false)}
               className="mt-6 h-10 w-full rounded-lg bg-[#146240] text-sm font-semibold text-white transition-colors hover:bg-[#0e4d32]"
             >
-              Continue to Upcoming Events
+              Create another account
             </button>
           </div>
         ) : (
