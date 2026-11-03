@@ -1,15 +1,212 @@
-// Placeholder page — replace with real "manage my events" functionality.
-export default function ManageEventsPage() {
-  return (
-    <div className="min-h-screen bg-slate-50 px-10 py-12">
-      <div className="mx-auto w-full max-w-6xl text-center">
+import { auth } from '@/lib/auth';
+import { headers } from 'next/headers';
+import Link from 'next/link';
+import { Calendar, MapPin, Pencil, Trash2 } from 'lucide-react';
+
+import React from 'react';
+
+// Same dev backend the other pages use; per-organizer route takes the email.
+const MANAGE_API_URL = 'http://localhost:8000/manage-event';
+
+interface ManagedEvent {
+  _id: string;
+  title: string;
+  description: string;
+  type: string;
+  thumbnailUrl: string;
+  location: string;
+  /** "YYYY-MM-DD" */
+  date: string;
+}
+
+/**
+ * Normalize one backend record. The manage endpoint should return the same
+ * create-form documents as GET /events (Mongo-style `_id`, `type`,
+ * `thumbnailUrl`, `date`), but fields are filled with fallbacks for the /
+ * events/[id] schema variants too (eventType, thumbnail, eventDate) so the
+ * page survives either shape.
+ */
+function toManagedEvent(raw: unknown): ManagedEvent | null {
+  if (!raw || typeof raw !== 'object') return null;
+  const d = raw as Record<string, string | undefined>;
+  const id = d._id ?? d.id;
+  const title = d.title;
+  const date = d.date ?? d.eventDate;
+  if (!id || !title || !date) return null;
+
+  return {
+    _id: String(id),
+    title,
+    description: d.description ?? '',
+    type: d.type ?? d.eventType ?? '',
+    thumbnailUrl: d.thumbnailUrl ?? d.thumbnail ?? '',
+    location: d.location ?? '',
+    date: date.slice(0, 10),
+  };
+}
+
+/** "2026-11-19" -> "Nov 19, 2026" (local time, matches the events list). */
+function formatDate(date: string): string {
+  const [y, m, d] = date.split('-').map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+}
+
+const ManagePage = async () => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  const user = session?.user;
+
+  // Composed like the other pages: heading at top, cards on a slate canvas.
+  const pageFrame = (children: React.ReactNode) => (
+    <main className="min-h-screen bg-slate-50 px-10 py-12">
+      <div className="mx-auto w-full max-w-6xl">
         <h1 className="text-center text-2xl font-extrabold tracking-tight text-[#0e5738] sm:text-3xl">
           Manage Events
         </h1>
-        <p className="mt-1.5 text-sm text-slate-500">
-          Edit or unpublish the events you organized. Coming soon.
+        <p className="mt-1.5 text-center text-xs text-slate-500">
+          Edit or remove the events you organized.
         </p>
+        {children}
       </div>
+    </main>
+  );
+
+  // Not signed in: the backend route needs the organizer's email.
+  if (!user?.email) {
+    return pageFrame(
+      <div className="mt-10 text-center">
+        <p className="text-sm text-slate-500">
+          Sign in to see the events you organized.
+        </p>
+        <Link
+          href="/login"
+          className="mt-4 inline-block rounded-lg bg-[#146240] px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#0e4d32]"
+        >
+          Login
+        </Link>
+      </div>
+    );
+  }
+
+  const res = await fetch(`${MANAGE_API_URL}/${user.email}`, {
+    cache: 'no-store',
+  });
+
+  if (!res.ok) {
+    return pageFrame(
+      <p role="alert" className="mt-10 text-center text-sm text-red-600">
+        Could not load your events (backend returned {res.status}).
+      </p>
+    );
+  }
+
+  const data: unknown = await res.json();
+  console.log(data);
+
+  // Accept a bare array or an { events: [...] } wrapper, like /events does.
+  const rawList: unknown[] = Array.isArray(data)
+    ? data
+    : Array.isArray((data as { events?: unknown[] })?.events)
+      ? (data as { events: unknown[] }).events
+      : [];
+
+  const events = rawList
+    .map(toManagedEvent)
+    .filter((event): event is ManagedEvent => event !== null);
+
+  if (events.length === 0) {
+    return pageFrame(
+      <div className="mt-10 text-center">
+        <p className="text-sm font-semibold text-[#0e5738]">
+          You haven&apos;t created any events yet.
+        </p>
+        <Link
+          href="/create-event"
+          className="mt-4 inline-block rounded-lg bg-[#146240] px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#0e4d32]"
+        >
+          Create the first one
+        </Link>
+      </div>
+    );
+  }
+
+  return pageFrame(
+    <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {events.map((event) => (
+        <ManagedEventCard key={event._id} event={event} />
+      ))}
     </div>
   );
-}
+};
+
+/** One manage card: thumbnail, badge, details, and Edit / Delete buttons. */
+function ManagedEventCard({ event }: { event: ManagedEvent }) {
+  return (
+    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-shadow hover:shadow-md">
+      {/* Thumbnail with the type badge on top-left, like the events grid. */}
+      <div className="relative w-full bg-slate-100">
+        {event.thumbnailUrl && (
+          // Deliberate plain <img>: user-entered external URL, next/image
+          // would need remotePatterns for every domain.
+          <img
+            src={event.thumbnailUrl}
+            alt={`Thumbnail for ${event.title}`}
+            className="h-44 w-full object-cover transition-transform duration-300 group-hover:scale-105"
+          />
+        )}
+        {event.type && (
+          <span className="absolute left-3 top-3 rounded-full bg-[#1fca82] px-2.5 py-1 text-[11px] font-bold text-white">
+            {event.type}
+          </span>
+        )}
+      </div>
+
+      <div className="flex flex-1 flex-col gap-2 p-5">
+        <h3 className="line-clamp-2 text-base font-bold text-[#20293d]">
+          {event.title}
+        </h3>
+
+        {event.description && (
+          <p className="line-clamp-2 text-sm leading-5 text-slate-500">
+            {event.description}
+          </p>
+        )}
+
+        <p className="flex items-center gap-1.5 text-sm text-slate-600">
+          <MapPin className="h-4 w-4 shrink-0 text-[#0e5738]" />
+          <span className="truncate">{event.location || 'Location TBD'}</span>
+        </p>
+
+        <p className="flex items-center gap-1.5 text-sm text-slate-600">
+          <Calendar className="h-4 w-4 shrink-0 text-[#0e5738]" />
+          {formatDate(event.date)}
+        </p>
+
+        {/* Design only — Edit / Delete are not wired up yet. */}
+        <div className="mt-auto flex gap-2 pt-2">
+          <button
+            type="button"
+            className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-slate-200 py-2.5 text-xs font-bold text-[#20293d] transition-colors hover:bg-slate-50"
+          >
+            <Pencil className="h-3.5 w-3.5 text-slate-500" />
+            Edit
+          </button>
+          <button
+            type="button"
+            className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-red-50 py-2.5 text-xs font-bold text-red-600 ring-1 ring-inset ring-red-100 transition-colors hover:bg-red-100"
+          >
+            <Trash2 className="h-3.5 w-3.5" />
+            Delete
+          </button>
+        </div>
+      </div>
+    </article>
+  );
+};
+
+export default ManagePage;

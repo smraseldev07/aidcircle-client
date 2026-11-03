@@ -77,7 +77,9 @@ export default function CreateEventPage() {
      
       const response = await fetch("http://localhost:8000/create-event", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json" 
+        },
         body: JSON.stringify(eventData),
       });
 
