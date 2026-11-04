@@ -1,10 +1,11 @@
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import Link from 'next/link';
-import { Calendar, MapPin, Trash2 } from 'lucide-react';
+import { Calendar, MapPin } from 'lucide-react';
 
 import React from 'react';
 import EditEvent from '@/components/EditEvent';
+import DeleteEvent from '@/components/DeleteEvent';
 
 // Same dev backend the other pages use; per-organizer route takes the email.
 const MANAGE_API_URL = 'http://localhost:8000/manage-event';
@@ -188,16 +189,11 @@ function ManagedEventCard({ event }: { event: ManagedEvent }) {
           {formatDate(event.date)}
         </p>
 
-        {/* Edit opens the EditEvent dialog; Delete is not wired up yet. */}
+        {/* Edit opens the EditEvent dialog; Delete is DeleteEvent (no-op
+            button until the backend gets a delete route). */}
         <div className="mt-auto flex gap-2 pt-2">
           <EditEvent event={event} />
-          <button
-            type="button"
-            className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-red-50 py-2.5 text-xs font-bold text-red-600 ring-1 ring-inset ring-red-100 transition-colors hover:bg-red-100"
-          >
-            <Trash2 className="h-3.5 w-3.5" />
-            Delete
-          </button>
+          <DeleteEvent event={event} />
         </div>
       </div>
     </article>

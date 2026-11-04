@@ -20,16 +20,20 @@ Next.js 16 app (App Router) with two data sources: a separate dev backend at har
 - Auth (`lib/auth.ts`, `lib/auth-client.ts`) needs `.env` (BETTER_AUTH_SECRET, BETTER_AUTH_URL, MONGODB_URI). Note the `.env` in the repo holds real Atlas credentials — don't commit new secrets.
 - The events backend is a separate service at `http://localhost:8000`; without it, `/events` shows its error state and `/events/[id]` renders `notFound()`.
 
-## Backend endpoints
+## Backend (separate repo)
 
-All hardcoded `http://localhost:8000` (not env-driven): `GET /events`, `GET /events/{id}`, `POST /create-event`, `POST /joined` (join an event), `GET /manage-event/{email}` (per-organizer list).
+- Source is the sibling repo **`E:\projects\aidcircle-server`** — one `index.js`. Client URLs are hardcoded `http://localhost:8000`: `GET /events`, `GET /events/{id}`, `POST /create-event`, `POST /joined`, `GET /manage-event/{email}`, `PATCH /manage-event/{id}`, `DELETE /manage-event/{id}`.
+- **No watch mode: restart `node index.js` after every server change** — the running process keeps serving stale code, and a real fix then looks like it didn't work. (Bites repeatedly; check this first when an edit "does nothing".)
+- `GET /manage-event/{email}` returns **joined copies** (joined collection, matched on `email`), not events by creatorEmail — the manage page's copy says "organized", the data says "joined".
+- `PATCH /manage-event/{id}` updates **both** collections so edits show on `/manage-event`, `/events`, and `/events/[id]`: the joined copy (`_id` stored as **String**) and the original event (`_id` as **ObjectId**). `_id` types differ per collection — a single `new ObjectId(id)` query matches nothing in `joined`; keep both `$set`s in sync when touching this handler.
+- `DELETE /manage-event/{id}` deletes **only the joined copy** — the original event stays in `events`, so it keeps showing on `/events` and `/events/[id]` after deletion.
 
 ## Routes
 
 - `/` landing, `/events` upcoming-events list, `/events/[id]` event detail, `/create-event`, `/login`, `/signup`, `/manage-event`, `/joined-events`.
 - Navbar (`components/navbar.tsx`) links Home and `/events`; signed-out users get a Login link, signed-in users a popover (Create Event, Manage Events, Joined Events, Sign out) driven by `authClient.useSession()`.
 - Auth is wired end to end: `/login` and `/signup` call `authClient.signIn/signUp.email`; the server pages `/events/[id]`, `/manage-event`, `/joined-events` gate on `auth.api.getSession({ headers: await headers() })`.
-- `/manage-event` fetches `GET /manage-event/{user.email}`; its Edit/Delete buttons are design-only (`components/EditEvent.tsx` is a WIP edit dialog). `/joined-events` currently fetches `/manage-event` too — a placeholder until the real endpoint exists.
+- `/manage-event` fetches `GET /manage-event/{user.email}`. Edit opens `components/EditEvent.tsx` — a create-event-style form prefilled from the card that PATCHes, then closes and `router.refresh()`; its trigger must stay the card's direct flex child (no wrapper `<form>` around it) and the form lives inside `DialogContent`. Delete is `components/DeleteEvent.tsx` — `window.confirm` then DELETEs (removes the joined copy only). `/joined-events` currently fetches `/manage-event` too — a placeholder until the real endpoint exists.
 
 ## Structure
 
