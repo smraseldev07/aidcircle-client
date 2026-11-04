@@ -38,8 +38,14 @@ export function Banner() {
           </div>
         </div>
 
-        {/* Right: stat card */}
-        <div className="relative min-h-72 rounded-2xl bg-[#1c2231]">
+        {/* Right: photo + stat badge */}
+        <div className="relative min-h-72 overflow-hidden rounded-2xl bg-[#1c2231]">
+          <img
+            src="/banner-blankets.jpg"
+            alt="Volunteer carrying a stack of blankets collected for winter relief"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
           <div className="absolute bottom-6 left-6 rounded-lg bg-white px-4 py-2.5 text-xs font-semibold text-[#1c2231] shadow-sm">
             1,420+ Blankets Delivered
           </div>
