@@ -1,9 +1,10 @@
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import Link from 'next/link';
-import { Calendar, MapPin, Pencil, Trash2 } from 'lucide-react';
+import { Calendar, MapPin, Trash2 } from 'lucide-react';
 
 import React from 'react';
+import EditEvent from '@/components/EditEvent';
 
 // Same dev backend the other pages use; per-organizer route takes the email.
 const MANAGE_API_URL = 'http://localhost:8000/manage-event';
@@ -187,15 +188,9 @@ function ManagedEventCard({ event }: { event: ManagedEvent }) {
           {formatDate(event.date)}
         </p>
 
-        {/* Design only — Edit / Delete are not wired up yet. */}
+        {/* Edit opens the EditEvent dialog; Delete is not wired up yet. */}
         <div className="mt-auto flex gap-2 pt-2">
-          <button
-            type="button"
-            className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-slate-200 py-2.5 text-xs font-bold text-[#20293d] transition-colors hover:bg-slate-50"
-          >
-            <Pencil className="h-3.5 w-3.5 text-slate-500" />
-            Edit
-          </button>
+          <EditEvent event={event} />
           <button
             type="button"
             className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-red-50 py-2.5 text-xs font-bold text-red-600 ring-1 ring-inset ring-red-100 transition-colors hover:bg-red-100"
