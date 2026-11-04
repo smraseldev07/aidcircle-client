@@ -17,9 +17,8 @@ import {
 } from "@/components/ui/dialog";
 import { EVENT_TYPES, todayISO } from "@/lib/events";
 
-// Same dev backend the other pages use. The update route is assumed to be
-// this per-event path (like GET /manage-event/{email}) — one-line change
-// here if the real endpoint differs.
+// Same dev backend the other pages use. The manage route updates one
+// document per id (PATCH /manage-event/:id in aidcircle-server/index.js).
 const EDIT_API_URL = "http://localhost:8000/manage-event";
 
 const inputClass =
@@ -101,7 +100,7 @@ const EditEvent = ({ event }: { event: EditableEvent }) => {
 
     try {
       const response = await fetch(`${EDIT_API_URL}/${event._id}`, {
-        method: "PUT",
+        method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(eventData),
       });
