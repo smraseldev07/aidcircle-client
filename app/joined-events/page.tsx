@@ -64,12 +64,12 @@ const JoinedPage = async () => {
 
   // Composed like the other pages: heading at top, cards on a slate canvas.
   const pageFrame = (children: React.ReactNode) => (
-    <main className="min-h-screen bg-slate-50 px-10 py-12">
+    <main className="min-h-screen bg-muted px-10 py-12">
       <div className="mx-auto w-full max-w-6xl">
-        <h1 className="text-center text-2xl font-extrabold tracking-tight text-[#0e5738] sm:text-3xl">
+        <h1 className="text-center text-2xl font-extrabold tracking-tight text-emerald-800 dark:text-emerald-400 sm:text-3xl">
           Joined Events
         </h1>
-        <p className="mt-1.5 text-center text-xs text-slate-500">
+        <p className="mt-1.5 text-center text-xs text-muted-foreground">
           Community efforts you signed up for.
         </p>
         {children}
@@ -81,7 +81,7 @@ const JoinedPage = async () => {
   if (!user?.email) {
     return pageFrame(
       <div className="mt-10 text-center">
-        <p className="text-sm text-slate-500">
+        <p className="text-sm text-muted-foreground">
           Sign in to see the events you joined.
         </p>
         <Link
@@ -123,7 +123,7 @@ const JoinedPage = async () => {
   if (events.length === 0) {
     return pageFrame(
       <div className="mt-10 text-center">
-        <p className="text-sm font-semibold text-[#0e5738]">
+        <p className="text-sm font-semibold text-emerald-800 dark:text-emerald-400">
           You haven&apos;t joined any events yet.
         </p>
         <Link
@@ -148,9 +148,9 @@ const JoinedPage = async () => {
 /** One joined card: thumbnail, badge, and details (no action buttons). */
 function JoinedEventCard({ event }: { event: JoinedEvent }) {
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-shadow hover:shadow-md">
+    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-shadow hover:shadow-md">
       {/* Thumbnail with the type badge on top-left, like the events grid. */}
-      <div className="relative w-full bg-slate-100">
+      <div className="relative w-full bg-muted">
         {event.thumbnailUrl && (
           // Deliberate plain <img>: user-entered external URL, next/image
           // would need remotePatterns for every domain.
@@ -168,23 +168,23 @@ function JoinedEventCard({ event }: { event: JoinedEvent }) {
       </div>
 
       <div className="flex flex-1 flex-col gap-2 p-5">
-        <h3 className="line-clamp-2 text-base font-bold text-[#20293d]">
+        <h3 className="line-clamp-2 text-base font-bold text-foreground">
           {event.title}
         </h3>
 
         {event.description && (
-          <p className="line-clamp-2 text-sm leading-5 text-slate-500">
+          <p className="line-clamp-2 text-sm leading-5 text-muted-foreground">
             {event.description}
           </p>
         )}
 
-        <p className="flex items-center gap-1.5 text-sm text-slate-600">
-          <MapPin className="h-4 w-4 shrink-0 text-[#0e5738]" />
+        <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
+          <MapPin className="h-4 w-4 shrink-0 text-emerald-800 dark:text-emerald-400" />
           <span className="truncate">{event.location || 'Location TBD'}</span>
         </p>
 
-        <p className="mt-auto flex items-center gap-1.5 text-sm text-slate-600">
-          <Calendar className="h-4 w-4 shrink-0 text-[#0e5738]" />
+        <p className="mt-auto flex items-center gap-1.5 text-sm text-muted-foreground">
+          <Calendar className="h-4 w-4 shrink-0 text-emerald-800 dark:text-emerald-400" />
           {formatDate(event.date)}
         </p>
       </div>

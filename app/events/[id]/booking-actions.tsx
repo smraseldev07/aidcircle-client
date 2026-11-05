@@ -45,7 +45,7 @@ export function BookingActions({
         {joined ? (
           <button
             type="button"
-            className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-50 px-6 py-3.5 text-center text-sm font-bold text-emerald-700 ring-1 ring-inset ring-emerald-200"
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 px-6 py-3.5 text-center text-sm font-bold text-emerald-700 dark:text-emerald-400 ring-1 ring-inset ring-emerald-200 dark:ring-emerald-800"
           >
             <Check className="h-4 w-4" />
             <span>Joined</span>
@@ -72,9 +72,9 @@ export function BookingActions({
 
         <button
           type="button"
-          className="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 py-3 text-xs font-bold text-slate-700 hover:bg-slate-50 transition"
+          className="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-border py-3 text-xs font-bold text-foreground hover:bg-muted transition"
         >
-          <Share2 className="h-3.5 w-3.5 text-slate-500" />
+          <Share2 className="h-3.5 w-3.5 text-muted-foreground" />
           Share Initiative
         </button>
       </div>

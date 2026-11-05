@@ -54,10 +54,10 @@ export default function UpcomingEventsPage() {
   return (
     <main className="min-h-screen px-10 py-12">
       <div className="mx-auto w-full max-w-6xl">
-        <h1 className="text-center text-2xl font-extrabold tracking-tight text-[#0e5738] sm:text-3xl">
+        <h1 className="text-center text-2xl font-extrabold tracking-tight text-emerald-800 dark:text-emerald-400 sm:text-3xl">
           Upcoming Events
         </h1>
-        <p className="mt-1.5 text-center text-xs text-slate-500">
+        <p className="mt-1.5 text-center text-xs text-muted-foreground">
           Community efforts you can still join — cleanups, plantations,
           donations and more.
         </p>
@@ -67,7 +67,7 @@ export default function UpcomingEventsPage() {
           <ErrorView message={error} onRetry={retry} />
         ) : events === null ? (
           // request in flight
-          <p className="mt-10 text-center text-sm text-slate-500">
+          <p className="mt-10 text-center text-sm text-muted-foreground">
             Loading events…
           </p>
         ) : events.length === 0 ? (
@@ -106,7 +106,7 @@ function ErrorView({ message, onRetry }: { message: string; onRetry: () => void 
 function EmptyView() {
   return (
     <div className="mt-10 text-center">
-      <p className="text-sm font-semibold text-[#0e5738]">
+      <p className="text-sm font-semibold text-emerald-800 dark:text-emerald-400">
         No upcoming events yet.
       </p>
       <Link
@@ -123,9 +123,9 @@ function EmptyView() {
  * View Event button. */
 function EventCard({ event }: { event: EventRecord }) {
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-shadow hover:shadow-md">
+    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-shadow hover:shadow-md">
       {/* Thumbnail, with the event type badge on top-left of the image. */}
-      <div className="relative w-full bg-slate-100">
+      <div className="relative w-full bg-muted">
         {/* thumbnailUrl is a user-entered external URL, so a plain <img> is
             simpler than next/image (which would need remotePatterns config). */}
         {event.thumbnailUrl && (
@@ -145,26 +145,26 @@ function EventCard({ event }: { event: EventRecord }) {
 
       {/* The details, and the button pinned to the bottom of the card. */}
       <div className="flex flex-1 flex-col gap-2 p-5">
-        <h3 className="line-clamp-2 text-base font-bold text-[#20293d]">
+        <h3 className="line-clamp-2 text-base font-bold text-foreground">
           {event.title}
         </h3>
 
         {event.description && (
-          <p className="line-clamp-2 text-sm leading-5 text-slate-500">
+          <p className="line-clamp-2 text-sm leading-5 text-muted-foreground">
             {event.description}
           </p>
         )}
 
-        <p className="flex items-center gap-1.5 text-sm text-slate-600">
-          <MapPin className="h-4 w-4 shrink-0 text-[#0e5738]" />
+        <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
+          <MapPin className="h-4 w-4 shrink-0 text-emerald-800 dark:text-emerald-400" />
           <span className="truncate">{event.location || "Location TBD"}</span>
         </p>
 
         {/* e.g. "Nov 19, 2026 · In 3 days" */}
-        <p className="flex items-center gap-1.5 text-sm text-slate-600">
-          <CalendarDays className="h-4 w-4 shrink-0 text-[#0e5738]" />
+        <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
+          <CalendarDays className="h-4 w-4 shrink-0 text-emerald-800 dark:text-emerald-400" />
           {formatDate(event.date)}
-          <span className="text-xs text-slate-400">·</span>
+          <span className="text-xs text-muted-foreground">·</span>
           <span className="text-xs font-semibold text-[#1fca82]">
             {relativeDate(event.date)}
           </span>

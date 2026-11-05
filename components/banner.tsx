@@ -46,7 +46,7 @@ export function Banner() {
             className="absolute inset-0 h-full w-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
-          <div className="absolute bottom-6 left-6 rounded-lg bg-white px-4 py-2.5 text-xs font-semibold text-[#1c2231] shadow-sm">
+          <div className="absolute bottom-6 left-6 rounded-lg bg-card px-4 py-2.5 text-xs font-semibold text-foreground shadow-sm">
             1,420+ Blankets Delivered
           </div>
         </div>

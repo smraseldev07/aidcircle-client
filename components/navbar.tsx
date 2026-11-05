@@ -4,6 +4,7 @@ import Link from "next/link";
 import { LogOut, CalendarPlus, ClipboardList, Handshake, type LucideIcon } from "lucide-react";
 
 import { authClient } from "@/lib/auth-client";
+import { ThemeToggle } from "@/components/theme-toggle";
 import {
   Popover,
   PopoverContent,
@@ -20,10 +21,10 @@ export function Navbar() {
   }
 
   return (
-    <header className="grid grid-cols-[1fr_auto_1fr] items-center bg-white px-10 py-4 ">
+    <header className="grid grid-cols-[1fr_auto_1fr] items-center bg-card px-10 py-4 ">
       <Link
         href="/"
-        className="text-xl font-extrabold tracking-tight text-emerald-950 max-w-6xl mx-auto"
+        className="text-xl font-extrabold tracking-tight text-emerald-900 dark:text-emerald-400 max-w-6xl mx-auto"
       >
         AidCircle.
       </Link>
@@ -31,13 +32,16 @@ export function Navbar() {
       <nav>
         <Link
           href="/events"
-          className="text-xs font-bold text-[#20293d] hover:text-emerald-800"
+          className="text-xs font-bold text-foreground hover:text-emerald-800 dark:hover:text-emerald-400"
         >
           Upcoming Events
         </Link>
       </nav>
 
       <div className="flex items-center justify-end gap-6 max-w-6xl mx-auto">
+        {/* Dark/light toggle — works signed in or out. */}
+        <ThemeToggle />
+
         {/* Session is still loading: keep the slot empty instead of flashing
             the Login button to signed-in users. */}
         {isPending ? null : session?.user ? (
@@ -92,9 +96,9 @@ function SignedInMenu({
 
       <PopoverContent align="end" className="w-64">
         <PopoverTitle>{email}</PopoverTitle>
-        <p className="text-xs text-slate-500">Signed in to AidCircle</p>
+        <p className="text-xs text-muted-foreground">Signed in to AidCircle</p>
 
-        <div className="h-px bg-slate-200" />
+        <div className="h-px bg-muted" />
 
         <PopoverLink
           href="/create-event"
@@ -112,14 +116,14 @@ function SignedInMenu({
           label="Joined Events"
         />
 
-        <div className="h-px bg-slate-200" />
+        <div className="h-px bg-muted" />
 
         <button
           type="button"
           onClick={onSignOut}
-          className="flex items-center gap-2 rounded-lg px-2 py-2 text-left text-sm font-semibold text-[#20293d] transition-colors hover:bg-slate-100"
+          className="flex items-center gap-2 rounded-lg px-2 py-2 text-left text-sm font-semibold text-foreground transition-colors hover:bg-muted"
         >
-          <LogOut className="h-4 w-4 text-slate-500" />
+          <LogOut className="h-4 w-4 text-muted-foreground" />
           Sign out
         </button>
       </PopoverContent>
@@ -140,9 +144,9 @@ function PopoverLink({
   return (
     <Link
       href={href}
-      className="flex items-center gap-2 rounded-lg px-2 py-2 text-sm font-semibold text-[#20293d] transition-colors hover:bg-slate-100"
+      className="flex items-center gap-2 rounded-lg px-2 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-muted"
     >
-      <Icon className="h-4 w-4 text-[#0e5738]" />
+      <Icon className="h-4 w-4 text-emerald-800 dark:text-emerald-400" />
       {label}
     </Link>
   );

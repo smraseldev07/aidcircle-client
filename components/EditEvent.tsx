@@ -22,9 +22,9 @@ import { EVENT_TYPES, todayISO } from "@/lib/events";
 const EDIT_API_URL = "http://localhost:8000/manage-event";
 
 const inputClass =
-  "h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm text-[#20293d] outline-none placeholder:text-slate-400 focus:border-[#1fca82] focus:ring-3 focus:ring-[#1fca82]/30";
+  "h-10 w-full rounded-lg border border-border bg-card px-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-[#1fca82] focus:ring-3 focus:ring-[#1fca82]/30";
 
-const labelClass = "text-sm font-medium text-[#20293d]";
+const labelClass = "text-sm font-medium text-foreground";
 
 /** The bits of a managed event the edit form needs (matches ManagedEvent). */
 export interface EditableEvent {
@@ -127,9 +127,9 @@ const EditEvent = ({ event }: { event: EditableEvent }) => {
         render={
           <button
             type="button"
-            className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-slate-200 py-2.5 text-xs font-bold text-[#20293d] transition-colors hover:bg-slate-50"
+            className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-border py-2.5 text-xs font-bold text-foreground transition-colors hover:bg-muted"
           >
-            <Pencil className="h-3.5 w-3.5 text-slate-500" />
+            <Pencil className="h-3.5 w-3.5 text-muted-foreground" />
             Edit
           </button>
         }
@@ -171,7 +171,7 @@ const EditEvent = ({ event }: { event: EditableEvent }) => {
                 rows={3}
                 value={form.description}
                 onChange={handleChange}
-                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-[#20293d] outline-none placeholder:text-slate-400 focus:border-[#1fca82] focus:ring-3 focus:ring-[#1fca82]/30"
+                className="w-full rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-[#1fca82] focus:ring-3 focus:ring-[#1fca82]/30"
               />
             </div>
 
@@ -243,7 +243,7 @@ const EditEvent = ({ event }: { event: EditableEvent }) => {
                   {dateError}
                 </p>
               ) : (
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-muted-foreground">
                   Choose a future date — past dates are not allowed.
                 </p>
               )}

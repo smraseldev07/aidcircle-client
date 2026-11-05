@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 
 import { EVENT_TYPES, addEvent, getEvents, todayISO, type EventRecord } from "@/lib/events";
+import { authClient } from "@/lib/auth-client";
 
 // The empty form; email is filled in and kept between submissions.
 const emptyForm = {
@@ -17,9 +18,9 @@ const emptyForm = {
 };
 
 const inputClass =
-  "h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm text-[#20293d] outline-none placeholder:text-slate-400 focus:border-[#1fca82] focus:ring-3 focus:ring-[#1fca82]/30";
+  "h-10 w-full rounded-lg border border-border bg-card px-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-[#1fca82] focus:ring-3 focus:ring-[#1fca82]/30";
 
-const labelClass = "text-sm font-medium text-[#20293d]";
+const labelClass = "text-sm font-medium text-foreground";
 
 export default function CreateEventPage() {
   const [form, setForm] = React.useState(emptyForm);
@@ -73,18 +74,24 @@ export default function CreateEventPage() {
     };
 
     // POST the event data to the backend.
-  
+   const {data, error} = await authClient.token()
+ const token = data?.token
+
+ console.log(token);
+ 
+ 
      
       const response = await fetch("http://localhost:8000/create-event", {
         method: "POST",
         headers: { 
-          "Content-Type": "application/json" 
+          "Content-Type": "application/json" ,
+          authorization: `bearer ${token}`
         },
         body: JSON.stringify(eventData),
       });
 
-      const data = await response.json()
-      console.log( data);
+      const newdata = await response.json()
+      console.log(newdata);
       
 
     
@@ -101,15 +108,15 @@ export default function CreateEventPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-card">
   
 
       <main className="px-10 py-12">
-        <div className="mx-auto w-full max-w-xl rounded-2xl bg-[#ddebe1] px-8 py-10">
-          <h1 className="text-center text-2xl font-extrabold tracking-tight text-[#0e5738] sm:text-3xl">
+        <div className="mx-auto w-full max-w-xl rounded-2xl bg-[#ddebe1] dark:bg-emerald-950/60 px-8 py-10">
+          <h1 className="text-center text-2xl font-extrabold tracking-tight text-emerald-800 dark:text-emerald-400 sm:text-3xl">
             Create an Event
           </h1>
-          <p className="mt-1.5 text-center text-xs text-slate-500">
+          <p className="mt-1.5 text-center text-xs text-muted-foreground">
             Organize a community effort — cleanups, plantations, donations and
             more.
           </p>
@@ -117,10 +124,10 @@ export default function CreateEventPage() {
           {created ? (
             // Success message shown after the event is saved.
             <div className="mt-8 text-center">
-              <p className="text-sm font-semibold text-[#0e5738]">
+              <p className="text-sm font-semibold text-emerald-800 dark:text-emerald-400">
                 Event created successfully!
               </p>
-              <p className="mt-1 text-xs text-slate-600">
+              <p className="mt-1 text-xs text-muted-foreground">
                 “{created.title}” is scheduled for {created.date} and is linked
                 to {created.creatorEmail}.
               </p>
@@ -163,7 +170,7 @@ export default function CreateEventPage() {
                   placeholder="What will volunteers do? Who should join?"
                   value={form.description}
                   onChange={handleChange}
-                  className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-[#20293d] outline-none placeholder:text-slate-400 focus:border-[#1fca82] focus:ring-3 focus:ring-[#1fca82]/30"
+                  className="w-full rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-[#1fca82] focus:ring-3 focus:ring-[#1fca82]/30"
                 />
               </div>
 
@@ -237,7 +244,7 @@ export default function CreateEventPage() {
                     {dateError}
                   </p>
                 ) : (
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-muted-foreground">
                     Choose a future date — past dates are not allowed.
                   </p>
                 )}
@@ -257,7 +264,7 @@ export default function CreateEventPage() {
                   onChange={handleChange}
                   className={inputClass}
                 />
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-muted-foreground">
                   Saved with the event so only you can edit it later.
                 </p>
               </div>
@@ -280,7 +287,7 @@ export default function CreateEventPage() {
 
           <Link
             href="/"
-            className="mt-6 block text-center text-xs font-bold text-[#20293d] hover:text-emerald-800"
+            className="mt-6 block text-center text-xs font-bold text-foreground hover:text-emerald-800 dark:hover:text-emerald-400"
           >
             Back to home
           </Link>

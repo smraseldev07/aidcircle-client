@@ -15,9 +15,9 @@ import {
 import { authClient } from "@/lib/auth-client";
 
 const inputClass =
-  "h-10 w-full rounded-lg border border-slate-200 bg-white pl-9 pr-3 text-sm text-[#20293d] outline-none placeholder:text-slate-400 focus:border-[#1fca82] focus:ring-3 focus:ring-[#1fca82]/30";
+  "h-10 w-full rounded-lg border border-border bg-card pl-9 pr-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-[#1fca82] focus:ring-3 focus:ring-[#1fca82]/30";
 
-const labelClass = "text-sm font-medium text-[#20293d]";
+const labelClass = "text-sm font-medium text-foreground";
 
 const emptyForm = {
   email: "",
@@ -58,8 +58,8 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 px-4 py-12">
-      <main className="mx-auto w-full max-w-md rounded-3xl border border-slate-100 bg-white px-8 py-10 shadow-sm">
+    <div className="min-h-screen bg-muted px-4 py-12">
+      <main className="mx-auto w-full max-w-md rounded-3xl border border-border bg-card px-8 py-10 shadow-sm">
         {/* Green heart badge */}
         <div className="flex justify-center">
           <div className="flex size-14 items-center justify-center rounded-2xl bg-[#0e9f6e] shadow-sm ring-4 ring-[#1fca82]/20">
@@ -67,7 +67,7 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <h1 className="mt-4 text-center text-3xl font-extrabold tracking-tight text-[#20293d]">
+        <h1 className="mt-4 text-center text-3xl font-extrabold tracking-tight text-foreground">
           Welcome Back
         </h1>
         <p className="mt-2 text-center text-sm text-emerald-700/80">
@@ -80,7 +80,7 @@ export default function LoginPage() {
               Email Address
             </label>
             <div className="relative">
-              <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+              <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <input
                 id="email"
                 name="email"
@@ -99,7 +99,7 @@ export default function LoginPage() {
               Password
             </label>
             <div className="relative">
-              <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+              <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <input
                 id="password"
                 name="password"
@@ -114,7 +114,7 @@ export default function LoginPage() {
                 type="button"
                 aria-label={showPassword ? "Hide password" : "Show password"}
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-muted-foreground"
               >
                 {showPassword ? (
                   <EyeOff className="h-4 w-4" />
@@ -140,11 +140,11 @@ export default function LoginPage() {
             <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
           </button>
 
-          <p className="text-center text-xs text-slate-500">
+          <p className="text-center text-xs text-muted-foreground">
             Don&apos;t have an account?{" "}
             <Link
               href="/signup"
-              className="font-bold text-emerald-700 hover:text-emerald-800"
+              className="font-bold text-emerald-700 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-400"
             >
               Sign up here
             </Link>

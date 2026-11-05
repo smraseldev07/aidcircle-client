@@ -18,12 +18,12 @@ const features = [
 
 export function WhyOrganize() {
   return (
-    <section className="bg-[#eef1f6] px-10 py-16">
+    <section className="bg-muted px-10 py-16">
       <div className="mx-auto max-w-7xl">
-        <h2 className="text-center text-2xl font-extrabold tracking-tight text-[#20293d] sm:text-3xl">
+        <h2 className="text-center text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
           Why Organize with AidCircle
         </h2>
-        <p className="mt-1.5 text-center text-xs text-slate-500">
+        <p className="mt-1.5 text-center text-xs text-muted-foreground">
           Built to ensure volunteer efforts directly reach communities in need.
         </p>
 
@@ -31,12 +31,12 @@ export function WhyOrganize() {
           {features.map((feature) => (
             <div
               key={feature.title}
-              className="rounded-xl border border-slate-200 bg-white px-6 py-7"
+              className="rounded-xl border border-border bg-card px-6 py-7"
             >
-              <h3 className="text-sm font-bold text-[#20293d]">
+              <h3 className="text-sm font-bold text-foreground">
                 {feature.title}
               </h3>
-              <p className="mt-3 text-xs leading-5 text-slate-500">
+              <p className="mt-3 text-xs leading-5 text-muted-foreground">
                 {feature.description}
               </p>
             </div>

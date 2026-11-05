@@ -17,9 +17,9 @@ import {
 import { authClient } from "@/lib/auth-client";
 
 const inputClass =
-  "h-10 w-full rounded-lg border border-slate-200 bg-white pl-9 pr-3 text-sm text-[#20293d] outline-none placeholder:text-slate-400 focus:border-[#1fca82] focus:ring-3 focus:ring-[#1fca82]/30";
+  "h-10 w-full rounded-lg border border-border bg-card pl-9 pr-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-[#1fca82] focus:ring-3 focus:ring-[#1fca82]/30";
 
-const labelClass = "text-sm font-medium text-[#20293d]";
+const labelClass = "text-sm font-medium text-foreground";
 
 const emptyForm = {
   name: "",
@@ -86,17 +86,17 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 px-4 py-12">
-      <main className="mx-auto w-full max-w-md rounded-3xl border border-slate-100 bg-white px-8 py-10 shadow-sm">
+    <div className="min-h-screen bg-muted px-4 py-12">
+      <main className="mx-auto w-full max-w-md rounded-3xl border border-border bg-card px-8 py-10 shadow-sm">
         {created ? (
           <div className="text-center">
             <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-[#1fca82]">
               <Check className="h-7 w-7 text-white" />
             </div>
-            <h1 className="mt-4 text-2xl font-extrabold tracking-tight text-[#20293d]">
+            <h1 className="mt-4 text-2xl font-extrabold tracking-tight text-foreground">
               Account created!
             </h1>
-            <p className="mt-2 text-sm text-slate-500">
+            <p className="mt-2 text-sm text-muted-foreground">
               You are signed in as {form.email}.
             </p>
             <button
@@ -116,7 +116,7 @@ export default function SignupPage() {
               </div>
             </div>
 
-            <h1 className="mt-4 text-center text-3xl font-extrabold tracking-tight text-[#20293d]">
+            <h1 className="mt-4 text-center text-3xl font-extrabold tracking-tight text-foreground">
               Create Account
             </h1>
             <p className="mt-2 text-center text-sm text-emerald-700/80">
@@ -129,7 +129,7 @@ export default function SignupPage() {
                   Full Name
                 </label>
                 <div className="relative">
-                  <User className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                  <User className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                   <input
                     id="name"
                     name="name"
@@ -147,7 +147,7 @@ export default function SignupPage() {
                   Email Address
                 </label>
                 <div className="relative">
-                  <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                  <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                   <input
                     id="email"
                     name="email"
@@ -166,7 +166,7 @@ export default function SignupPage() {
                   Profile Photo URL
                 </label>
                 <div className="relative">
-                  <ImageIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                  <ImageIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                   <input
                     id="photoUrl"
                     name="photoUrl"
@@ -177,7 +177,7 @@ export default function SignupPage() {
                     className={inputClass}
                   />
                 </div>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-muted-foreground">
                   Optional: Leave empty for default avatar
                 </p>
               </div>
@@ -187,7 +187,7 @@ export default function SignupPage() {
                   Password
                 </label>
                 <div className="relative">
-                  <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                  <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                   <input
                     id="password"
                     name="password"
@@ -202,7 +202,7 @@ export default function SignupPage() {
                     type="button"
                     aria-label={showPassword ? "Hide password" : "Show password"}
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-muted-foreground"
                   >
                     {showPassword ? (
                       <EyeOff className="h-4 w-4" />
@@ -244,11 +244,11 @@ export default function SignupPage() {
                 <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
               </button>
 
-              <p className="text-center text-xs text-slate-500">
+              <p className="text-center text-xs text-muted-foreground">
                 Already have an account?{" "}
                 <Link
                   href="/login"
-                  className="font-bold text-emerald-700 hover:text-emerald-800"
+                  className="font-bold text-emerald-700 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-400"
                 >
                   Login here
                 </Link>
@@ -266,9 +266,9 @@ function PasswordRule({ text, valid }: { text: string; valid: boolean }) {
   return (
     <li className="flex items-center gap-1.5 text-xs">
       <Check
-        className={`h-3.5 w-3.5 ${valid ? "text-[#1fca82]" : "text-slate-300"}`}
+        className={`h-3.5 w-3.5 ${valid ? "text-[#1fca82]" : "text-muted-foreground"}`}
       />
-      <span className={valid ? "text-[#0e5738]" : "text-slate-500"}>{text}</span>
+      <span className={valid ? "text-emerald-800 dark:text-emerald-400" : "text-muted-foreground"}>{text}</span>
     </li>
   );
 }
