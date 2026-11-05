@@ -8,7 +8,7 @@ import type { EditableEvent } from "@/components/EditEvent";
 
 // Backend delete route (aidcircle-server/index.js): removes the joined copy
 // and the original event, so the card disappears from every page.
-const DELETE_API_URL = "http://localhost:8000/manage-event";
+const DELETE_API_URL = `${process.env.NEXT_PUBLIC_API_URL}/manage-event`;
 
 const DeleteEvent = ({ event }: { event: EditableEvent }) => {
   const router = useRouter();

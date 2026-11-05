@@ -8,7 +8,7 @@ import EditEvent from '@/components/EditEvent';
 import DeleteEvent from '@/components/DeleteEvent';
 
 // Same dev backend the other pages use; per-organizer route takes the email.
-const MANAGE_API_URL = 'http://localhost:8000/manage-event';
+const MANAGE_API_URL = `${process.env.NEXT_PUBLIC_API_URL}/manage-event`;
 
 interface ManagedEvent {
   _id: string;

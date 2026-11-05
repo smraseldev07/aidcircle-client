@@ -8,7 +8,7 @@ import React from 'react';
 // Same dev backend family as the join POST (/joined). GET-style route is
 // assumed to take the email path param like /manage-event does — one-line
 // change here if the real endpoint differs.
-const JOINED_API_URL = 'http://localhost:8000/manage-event';
+const JOINED_API_URL = `${process.env.NEXT_PUBLIC_API_URL}/manage-event`;
 
 interface JoinedEvent {
   _id: string;

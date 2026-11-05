@@ -7,7 +7,7 @@ import { CalendarDays, MapPin } from "lucide-react";
 import { todayISO, type EventRecord } from "@/lib/events";
 
 // Same dev backend the Create Event form posts to (not env-driven yet).
-const EVENTS_API_URL = "http://localhost:8000/events";
+const EVENTS_API_URL = `${process.env.NEXT_PUBLIC_API_URL}/events`;
 
 // Green button style shared across this page.
 const primaryButtonClass =

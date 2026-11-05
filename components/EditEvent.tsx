@@ -19,7 +19,7 @@ import { EVENT_TYPES, todayISO } from "@/lib/events";
 
 // Same dev backend the other pages use. The manage route updates one
 // document per id (PATCH /manage-event/:id in aidcircle-server/index.js).
-const EDIT_API_URL = "http://localhost:8000/manage-event";
+const EDIT_API_URL = `${process.env.NEXT_PUBLIC_API_URL}/manage-event`;
 
 const inputClass =
   "h-10 w-full rounded-lg border border-border bg-card px-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-[#1fca82] focus:ring-3 focus:ring-[#1fca82]/30";

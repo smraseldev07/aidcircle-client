@@ -4,7 +4,7 @@ import { ArrowRight, Calendar, MapPin } from "lucide-react";
 import { todayISO, type EventRecord } from "@/lib/events";
 
 // Same dev backend the rest of the pages read from (not env-driven yet).
-const EVENTS_API_URL = "http://localhost:8000/events";
+const EVENTS_API_URL = `${process.env.NEXT_PUBLIC_API_URL}/events`;
 
 /**
  * "Recent upcoming events" teaser shown on the homepage: the next six
