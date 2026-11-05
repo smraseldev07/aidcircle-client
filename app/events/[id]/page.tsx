@@ -42,7 +42,7 @@ const EventDetails = async ({ params }: { params: Promise<{ id: string }> }) => 
    
 
   const res = await fetch(`http://localhost:8000/events/${id}`, {
-    cache: 'no-store', // ensures up-to-date details
+    cache: 'no-store', 
   });
 
   if (!res.ok) {
