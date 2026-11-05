@@ -1,4 +1,5 @@
 import { Banner } from "@/components/banner";
+import { CommunityInAction } from "@/components/community-in-action";
 import { Subscribe } from "@/components/subscribe";
 import { UpcomingEvents } from "@/components/upcoming-events";
 import { WhyOrganize } from "@/components/why-organize";
@@ -9,6 +10,7 @@ export default function Home() {
       
       <Banner />
       <UpcomingEvents />
+      <CommunityInAction />
       <WhyOrganize />
       <Subscribe />
       
